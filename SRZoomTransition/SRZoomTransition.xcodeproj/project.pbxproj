@@ -34,6 +34,7 @@
 
 /* Begin PBXFileReference section */
 		1485BC111BE7089400AC5055 /* Alamofire.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; path = Alamofire.framework.dSYM; sourceTree = "<group>"; };
+		1414BCE31BE71BDD00C28BC0 /* objc-header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "objc-header.h"; sourceTree = "<group>"; };
 		1485BC131BE7095D00AC5055 /* CatCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CatCollectionViewController.swift; sourceTree = "<group>"; };
 		14A292531BE6F8BA00361B28 /* SRZoomTransition.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SRZoomTransition.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		14A292561BE6F8BA00361B28 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -98,6 +99,7 @@
 				14A292621BE6F8BA00361B28 /* Info.plist */,
 				14FE43241BE6FB2000A6A4F8 /* Alamofire.framework */,
 				14FE43251BE6FB2000A6A4F8 /* Cartography.framework */,
+				1414BCE31BE71BDD00C28BC0 /* objc-header.h */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -315,9 +317,11 @@
 				);
 				INFOPLIST_FILE = SRZoomTransition/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.SRLabs.swift.SRZoomTransition;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				USER_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../Carthage/Build/iOS/*/Headers";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/objc-header.h";
+				USER_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../Carthage/Build/iOS/*/Headers $(PROJECT_DIR)/../Carthage/Build/iOS/**";
 			};
 			name = Debug;
 		};
@@ -332,9 +336,11 @@
 				);
 				INFOPLIST_FILE = SRZoomTransition/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.SRLabs.swift.SRZoomTransition;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				USER_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../Carthage/Build/iOS/*/Headers";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/objc-header.h";
+				USER_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../Carthage/Build/iOS/*/Headers $(PROJECT_DIR)/../Carthage/Build/iOS/**";
 			};
 			name = Release;
 		};

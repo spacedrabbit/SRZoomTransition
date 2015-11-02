@@ -36,7 +36,7 @@ public struct CatAPIUrl {
   }
 }
 
-public class CatCollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+public class CatCollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, NSXMLParserDelegate {
   
   
   // MARK: - Variables
@@ -56,27 +56,46 @@ public class CatCollectionViewController: UIViewController, UICollectionViewData
     self.view.addSubview(self.catCollectionView)
     self.catCollectionView.delegate = self
     self.catCollectionView.dataSource = self
+    self.catCollectionView.backgroundColor = UIColor.redColor()
     
+    self.makeCatRequest()
     self.configureConstraints()
   }
   
-  private func makeCatRequest() {
+  public func makeCatRequest() {
     Alamofire.request(.GET, CatAPIUrl.CatRequestUrl)
-      .responseString { response in
-        print("Success: \(response.result.isSuccess)")
-        print("Response String: \(response.result.value)")
+      .responseData { response in
+        print("looking at the response")
+        //let xmlParser: NSXMLParser = NSXMLParser(data: response.result)
+        //xmlParser.delegate = self
       }
   }
   
   
   // MARK: - Layout
   private func configureConstraints() {
-    
     constrain( catCollectionView ) { collectionView in
       collectionView.edges == collectionView.superview!.edges
     }
   }
   
+  
+  // MARK: - XML Parser
+  public func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
+    
+  }
+  
+  public func parser(parser: NSXMLParser, foundAttributeDeclarationWithName attributeName: String, forElement elementName: String, type: String?, defaultValue: String?) {
+    
+  }
+  
+  public func parser(parser: NSXMLParser, foundExternalEntityDeclarationWithName name: String, publicID: String?, systemID: String?) {
+    
+  }
+  
+  public func parser(parser: NSXMLParser, foundNotationDeclarationWithName name: String, publicID: String?, systemID: String?) {
+    
+  }
   
   // MARK: - UICollectionViewDataSource
   public func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
