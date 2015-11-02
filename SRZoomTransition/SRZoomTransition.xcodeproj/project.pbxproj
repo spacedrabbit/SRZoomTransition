@@ -7,34 +7,37 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1485BC101BE7087700AC5055 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14FE43241BE6FB2000A6A4F8 /* Alamofire.framework */; };
-		1485BC121BE7089400AC5055 /* Alamofire.framework.dSYM in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1485BC111BE7089400AC5055 /* Alamofire.framework.dSYM */; };
+		147642111BE735A600517FC3 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1476420F1BE735A600517FC3 /* Alamofire.framework */; };
+		147642121BE735A600517FC3 /* Cartography.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 147642101BE735A600517FC3 /* Cartography.framework */; };
+		147642151BE735FC00517FC3 /* Alamofire.framework.dSYM in CopyFiles */ = {isa = PBXBuildFile; fileRef = 147642131BE735FC00517FC3 /* Alamofire.framework.dSYM */; };
+		147642161BE735FC00517FC3 /* Cartography.framework.dSYM in CopyFiles */ = {isa = PBXBuildFile; fileRef = 147642141BE735FC00517FC3 /* Cartography.framework.dSYM */; };
 		1485BC141BE7095D00AC5055 /* CatCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1485BC131BE7095D00AC5055 /* CatCollectionViewController.swift */; };
 		14A292571BE6F8BA00361B28 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14A292561BE6F8BA00361B28 /* AppDelegate.swift */; };
 		14A2925C1BE6F8BA00361B28 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 14A2925A1BE6F8BA00361B28 /* Main.storyboard */; };
 		14A2925E1BE6F8BA00361B28 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 14A2925D1BE6F8BA00361B28 /* Assets.xcassets */; };
 		14A292611BE6F8BA00361B28 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 14A2925F1BE6F8BA00361B28 /* LaunchScreen.storyboard */; };
-		14FE43271BE6FB2000A6A4F8 /* Cartography.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14FE43251BE6FB2000A6A4F8 /* Cartography.framework */; };
-		14FE432D1BE6FBE600A6A4F8 /* Cartography.framework.dSYM in CopyFiles */ = {isa = PBXBuildFile; fileRef = 14FE432B1BE6FBE600A6A4F8 /* Cartography.framework.dSYM */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		14FE43291BE6FBC700A6A4F8 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 8;
+			buildActionMask = 12;
 			dstPath = "";
 			dstSubfolderSpec = 16;
 			files = (
-				1485BC121BE7089400AC5055 /* Alamofire.framework.dSYM in CopyFiles */,
-				14FE432D1BE6FBE600A6A4F8 /* Cartography.framework.dSYM in CopyFiles */,
+				147642151BE735FC00517FC3 /* Alamofire.framework.dSYM in CopyFiles */,
+				147642161BE735FC00517FC3 /* Cartography.framework.dSYM in CopyFiles */,
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		1485BC111BE7089400AC5055 /* Alamofire.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; path = Alamofire.framework.dSYM; sourceTree = "<group>"; };
 		1414BCE31BE71BDD00C28BC0 /* objc-header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "objc-header.h"; sourceTree = "<group>"; };
+		1476420F1BE735A600517FC3 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = ../Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
+		147642101BE735A600517FC3 /* Cartography.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cartography.framework; path = ../Carthage/Build/iOS/Cartography.framework; sourceTree = "<group>"; };
+		147642131BE735FC00517FC3 /* Alamofire.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = Alamofire.framework.dSYM; path = ../Carthage/Build/iOS/Alamofire.framework.dSYM; sourceTree = "<group>"; };
+		147642141BE735FC00517FC3 /* Cartography.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = Cartography.framework.dSYM; path = ../Carthage/Build/iOS/Cartography.framework.dSYM; sourceTree = "<group>"; };
 		1485BC131BE7095D00AC5055 /* CatCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CatCollectionViewController.swift; sourceTree = "<group>"; };
 		14A292531BE6F8BA00361B28 /* SRZoomTransition.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SRZoomTransition.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		14A292561BE6F8BA00361B28 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -42,10 +45,6 @@
 		14A2925D1BE6F8BA00361B28 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = SRZoomTransition/Assets.xcassets; sourceTree = "<group>"; };
 		14A292601BE6F8BA00361B28 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		14A292621BE6F8BA00361B28 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = SRZoomTransition/Info.plist; sourceTree = "<group>"; };
-		14FE43241BE6FB2000A6A4F8 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = ../Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
-		14FE43251BE6FB2000A6A4F8 /* Cartography.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cartography.framework; path = ../Carthage/Build/iOS/Cartography.framework; sourceTree = "<group>"; };
-		14FE432A1BE6FBE600A6A4F8 /* Alamofire.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; path = Alamofire.framework.dSYM; sourceTree = "<group>"; };
-		14FE432B1BE6FBE600A6A4F8 /* Cartography.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; path = Cartography.framework.dSYM; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,8 +52,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1485BC101BE7087700AC5055 /* Alamofire.framework in Frameworks */,
-				14FE43271BE6FB2000A6A4F8 /* Cartography.framework in Frameworks */,
+				147642111BE735A600517FC3 /* Alamofire.framework in Frameworks */,
+				147642121BE735A600517FC3 /* Cartography.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -64,6 +63,10 @@
 		14A2924A1BE6F8BA00361B28 = {
 			isa = PBXGroup;
 			children = (
+				147642131BE735FC00517FC3 /* Alamofire.framework.dSYM */,
+				147642141BE735FC00517FC3 /* Cartography.framework.dSYM */,
+				1476420F1BE735A600517FC3 /* Alamofire.framework */,
+				147642101BE735A600517FC3 /* Cartography.framework */,
 				14FE432E1BE6FC7D00A6A4F8 /* Supporting Files */,
 				14A292551BE6F8BA00361B28 /* SRZoomTransition */,
 				14A292541BE6F8BA00361B28 /* Products */,
@@ -91,14 +94,9 @@
 			isa = PBXGroup;
 			children = (
 				14A2925F1BE6F8BA00361B28 /* LaunchScreen.storyboard */,
-				1485BC111BE7089400AC5055 /* Alamofire.framework.dSYM */,
-				14FE432A1BE6FBE600A6A4F8 /* Alamofire.framework.dSYM */,
-				14FE432B1BE6FBE600A6A4F8 /* Cartography.framework.dSYM */,
 				14A2925A1BE6F8BA00361B28 /* Main.storyboard */,
 				14A2925D1BE6F8BA00361B28 /* Assets.xcassets */,
 				14A292621BE6F8BA00361B28 /* Info.plist */,
-				14FE43241BE6FB2000A6A4F8 /* Alamofire.framework */,
-				14FE43251BE6FB2000A6A4F8 /* Cartography.framework */,
 				1414BCE31BE71BDD00C28BC0 /* objc-header.h */,
 			);
 			name = "Supporting Files";
@@ -180,8 +178,8 @@
 			files = (
 			);
 			inputPaths = (
-				"$(SRCROOT)/../Carthage/Build/iOS/Cartography.framework",
 				"$(SRCROOT)/../Carthage/Build/iOS/Alamofire.framework",
+				"$(SRCROOT)/../Carthage/Build/iOS/Cartography.framework",
 			);
 			outputPaths = (
 			);
