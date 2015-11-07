@@ -245,6 +245,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/../Carthage/**";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -289,6 +290,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/../Carthage/**";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -312,14 +314,17 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../Carthage/**",
+					"$(SRCROOT)/../Carthage/Build/iOS",
 				);
+				INCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "";
 				INFOPLIST_FILE = SRZoomTransition/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.SRLabs.swift.SRZoomTransition;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/objc-header.h";
-				USER_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../Carthage/Build/iOS/*/Headers $(PROJECT_DIR)/../Carthage/Build/iOS/**";
+				USER_HEADER_SEARCH_PATHS = "";
+				USE_HEADERMAP = NO;
 			};
 			name = Debug;
 		};
@@ -331,14 +336,17 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../Carthage/**",
+					"$(SRCROOT)/../Carthage/Build/iOS",
 				);
+				INCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "";
 				INFOPLIST_FILE = SRZoomTransition/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.SRLabs.swift.SRZoomTransition;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/objc-header.h";
-				USER_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../Carthage/Build/iOS/*/Headers $(PROJECT_DIR)/../Carthage/Build/iOS/**";
+				USER_HEADER_SEARCH_PATHS = "";
+				USE_HEADERMAP = NO;
 			};
 			name = Release;
 		};

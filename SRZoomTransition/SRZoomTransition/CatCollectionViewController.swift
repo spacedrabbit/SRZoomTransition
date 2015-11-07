@@ -63,11 +63,13 @@ public class CatCollectionViewController: UIViewController, UICollectionViewData
   }
   
   public func makeCatRequest() {
-    Alamofire.request(.GET, CatAPIUrl.CatRequestUrl)
+    Alamofire.request(.GET, CatAPIUrl.CatRequestUrl, parameters: ["format" : "xml"])
       .responseData { response in
         print("looking at the response")
-        //let xmlParser: NSXMLParser = NSXMLParser(data: response.result)
-        //xmlParser.delegate = self
+        let xmlParser: NSXMLParser = NSXMLParser(data: response.data!)
+        xmlParser.delegate = self
+        xmlParser.shouldProcessNamespaces = true
+        xmlParser.parse()
       }
   }
   
@@ -81,19 +83,41 @@ public class CatCollectionViewController: UIViewController, UICollectionViewData
   
   
   // MARK: - XML Parser
+  // XML Parsing is really odd, see http://themainthread.com/blog/2014/04/mapping-xml-to-objects-with-nsxmlparser.html
+  var indentationLevel: Int = 0
+  var elementStack: [String] = []
+  var encounteredElementValue: String = String()
+  var elementDictionary: [String : String] = [String : String]()
+  
   public func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
+    elementStack.append(elementName)
+  }
+  
+  public func parser(parser: NSXMLParser, foundCharacters string: String) {
+    
+    let whiteSpaced: NSCharacterSet = NSCharacterSet.newlineCharacterSet()
+    if let _: Range = string.rangeOfCharacterFromSet(whiteSpaced) {
+      //if !rangeOfSpaced.isEmpty {
+      //  print("not empty")
+      //}
+    } else {
+      encounteredElementValue = string
+      if let element: String = elementStack.last {
+        elementDictionary[element] = encounteredElementValue
+      }
+    }
+    
     
   }
   
-  public func parser(parser: NSXMLParser, foundAttributeDeclarationWithName attributeName: String, forElement elementName: String, type: String?, defaultValue: String?) {
-    
-  }
-  
-  public func parser(parser: NSXMLParser, foundExternalEntityDeclarationWithName name: String, publicID: String?, systemID: String?) {
-    
-  }
-  
-  public func parser(parser: NSXMLParser, foundNotationDeclarationWithName name: String, publicID: String?, systemID: String?) {
+  public func parser(parser: NSXMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
+    if let lastElementOnStack: String = elementStack.last {
+      if lastElementOnStack == elementName {
+        let closedTag:String? = elementStack.popLast()
+        print("finished popping \(closedTag)")
+        print("current dict: \(elementDictionary)")
+      }
+    }
     
   }
   
