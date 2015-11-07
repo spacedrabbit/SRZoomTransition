@@ -16,6 +16,7 @@
 		14A2925C1BE6F8BA00361B28 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 14A2925A1BE6F8BA00361B28 /* Main.storyboard */; };
 		14A2925E1BE6F8BA00361B28 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 14A2925D1BE6F8BA00361B28 /* Assets.xcassets */; };
 		14A292611BE6F8BA00361B28 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 14A2925F1BE6F8BA00361B28 /* LaunchScreen.storyboard */; };
+		14A2DE4A1BEDE6FD0064D7CE /* Cat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14A2DE491BEDE6FD0064D7CE /* Cat.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -45,6 +46,7 @@
 		14A2925D1BE6F8BA00361B28 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = SRZoomTransition/Assets.xcassets; sourceTree = "<group>"; };
 		14A292601BE6F8BA00361B28 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		14A292621BE6F8BA00361B28 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = SRZoomTransition/Info.plist; sourceTree = "<group>"; };
+		14A2DE491BEDE6FD0064D7CE /* Cat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cat.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +86,7 @@
 		14A292551BE6F8BA00361B28 /* SRZoomTransition */ = {
 			isa = PBXGroup;
 			children = (
+				14A2DE491BEDE6FD0064D7CE /* Cat.swift */,
 				14A292561BE6F8BA00361B28 /* AppDelegate.swift */,
 				1485BC131BE7095D00AC5055 /* CatCollectionViewController.swift */,
 			);
@@ -196,6 +199,7 @@
 			files = (
 				14A292571BE6F8BA00361B28 /* AppDelegate.swift in Sources */,
 				1485BC141BE7095D00AC5055 /* CatCollectionViewController.swift in Sources */,
+				14A2DE4A1BEDE6FD0064D7CE /* Cat.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
