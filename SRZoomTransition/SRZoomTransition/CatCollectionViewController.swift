@@ -222,16 +222,10 @@ public class CatCollectionViewController: UIViewController, UICollectionViewData
     
     if self.catArray.count > 0 {
       let catToDisplay: Cat = self.catArray[indexPath.row]
-      Alamofire.request(.GET, catToDisplay.url).responseData({ (response) -> Void in
-        if let catImageData: NSData = response.data {
-          if let catImage: UIImage = UIImage(data: catImageData) {
-            let catImageView: UIImageView = UIImageView(image: catImage)
-            catImageView.frame = cell.contentView.frame
-            catImageView.contentMode = .ScaleAspectFit
-            cell.contentView.addSubview(catImageView)
-          }
-        }
-      })
+      if let catImageView: UIImageView = UIImageView(image: catToDisplay.catImage) {
+        catImageView.frame = cell.contentView.frame
+        cell.contentView.addSubview(catImageView)
+      }
     }
     cell.contentView.backgroundColor = UIColor.blueColor()
     
@@ -249,7 +243,13 @@ public class CatCollectionViewController: UIViewController, UICollectionViewData
   
   // MARK: - UICollectionViewDelegate
   public func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-    
+    if let catToDisplay: Cat = self.catArray[indexPath.row] {
+      if let catToDisplayImage: UIImage = catToDisplay.catImage {
+        let dtvc: CatFullScreenView = CatFullScreenView()
+        dtvc.loadViewWithCatImage(catToDisplayImage)
+        self.navigationController?.pushViewController(dtvc, animated: true)
+      }
+    }
   }
   
   
