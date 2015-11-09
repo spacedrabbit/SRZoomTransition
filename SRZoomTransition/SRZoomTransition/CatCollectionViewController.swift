@@ -49,7 +49,7 @@ public struct CatAPIUrl {
   }
 }
 
-public class CatCollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, NSXMLParserDelegate {
+public class CatCollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, NSXMLParserDelegate, CatZoomTransitionCoordinatorDelegate, UIViewControllerTransitioningDelegate {
   
   
   // MARK: - Variables
@@ -242,14 +242,61 @@ public class CatCollectionViewController: UIViewController, UICollectionViewData
   
   
   // MARK: - UICollectionViewDelegate
+  var transitioningViewRect: CGRect?
+  var viewToSnapShot: UIView?
   public func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+    let formatString: String = "%.0f"
+    if let catCollectionCell: UICollectionViewCell = collectionView.cellForItemAtIndexPath(indexPath) {
+      let cellX: String = String(format: formatString, catCollectionCell.frame.origin.x)
+      let cellY: String = String(format: formatString, catCollectionCell.frame.origin.y)
+      let cellWidth: String = String(format: formatString, catCollectionCell.frame.size.width)
+      let cellHeight: String = String(format: formatString, catCollectionCell.frame.size.height)
+      
+      let cellTranslatedInView: CGRect = catCollectionCell.convertRect(catCollectionCell.bounds, toView: self.view)
+      
+      print("selectedCell origin: (\(cellX), \(cellY))")
+      print("selectedCell size: (\(cellWidth), \(cellHeight))")
+      print("selectedCell in view's coordinate space: \(cellTranslatedInView)")
+      transitioningViewRect = cellTranslatedInView
+      viewToSnapShot = catCollectionCell.contentView
+    }
+    
     if let catToDisplay: Cat = self.catArray[indexPath.row] {
       if let catToDisplayImage: UIImage = catToDisplay.catImage {
         let dtvc: CatFullScreenView = CatFullScreenView()
         dtvc.loadViewWithCatImage(catToDisplayImage)
-        self.navigationController?.pushViewController(dtvc, animated: true)
+        dtvc.transitioningDelegate = self
+        self.presentViewController(dtvc, animated: true, completion: nil)
+        //self.navigationController?.pushViewController(dtvc, animated: true)
       }
     }
+  }
+  
+  public func boundsForViewToEnterTransition() -> CGRect {
+    if let viewRect: CGRect =  transitioningViewRect {
+      return viewRect
+    }
+    return CGRectZero
+  }
+  
+  public func boundsForViewToOccupyAfterTransition() -> CGRect {
+    if let viewRect: CGRect =  transitioningViewRect {
+      return viewRect
+    }
+    return CGRectZero
+  }
+  
+  public func captureSnapShotForView() -> UIView {
+    if let view: UIView = viewToSnapShot {
+      return view
+    }
+    return UIView()
+  }
+  
+  public func animationControllerForPresentedController(presented: UIViewController, presentingController presenting: UIViewController, sourceController source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+    let animationController: CatZoomTransitionCoordinator = CatZoomTransitionCoordinator()
+    animationController.delegate = self
+    return animationController
   }
   
   
