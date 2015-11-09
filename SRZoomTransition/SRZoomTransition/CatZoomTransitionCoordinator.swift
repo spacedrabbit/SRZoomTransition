@@ -9,17 +9,64 @@
 import Foundation
 import UIKit
 
+extension UIView {
+  func cat_snapshot() -> UIImage {
+    UIGraphicsBeginImageContextWithOptions(self.bounds.size, self.opaque, UIScreen.mainScreen().scale)
+    let context: CGContextRef = UIGraphicsGetCurrentContext()!
+    self.layer.renderInContext(context)
+    let snapshot: UIImage = UIGraphicsGetImageFromCurrentImageContext()
+    UIGraphicsEndImageContext()
+    return snapshot
+  }
+}
+
 @objc public protocol CatZoomTransitionCoordinatorDelegate: class {
-  func boundsForViewToEnterTransition() -> CGRect
-  func boundsForViewToOccupyAfterTransition() -> CGRect
-  optional func captureSnapshotForImage() -> UIImageView
-  optional func captureSnapShotForView() -> UIView
+//  func boundsForViewToEnterTransition() -> CGRect
+//  func boundsForViewToOccupyAfterTransition() -> CGRect
+//  optional func captureSnapshotForImage() -> UIImageView
+//  optional func captureSnapShotForView() -> UIView
+  
+  func coordinateZoomTransition(withCatZoomCoordinator coordinator: CatZoomTransitionCoordinator,
+    forView view: UIView,
+    relativeToView relativeView: UIView,
+    fromViewController sourceVC: UIViewController,
+    toViewController destinationVC: UIViewController) -> CGRect
+  
+  func coordinateZoomReverseTransition(withCatCoordinator coordinator: CatZoomTransitionCoordinator,
+    forView view: UIView,
+    relativeToView relativeView: UIView,
+    fromViewController sourceVC: UIViewController,
+    toViewController destinationVC: UIViewController) -> CGRect
+}
+
+public enum CatTransitionType {
+  case CatTransitionPresentating
+  case CatTransitionDismissing
 }
 
 public class CatZoomTransitionCoordinator: NSObject, UIViewControllerAnimatedTransitioning {
   
+  public weak var delegate: CatZoomTransitionCoordinatorDelegate?
+  public var targetView: UIView?
   public var transitionDuration: NSTimeInterval = 1.00
-  public var delegate: CatZoomTransitionCoordinatorDelegate?
+  public var transitionType: CatTransitionType = .CatTransitionPresentating
+  public var fadeColor: UIColor = UIColor.whiteColor()
+  
+  public override required init() {
+    super.init()
+  }
+  
+  public convenience init(withTargetView view: UIView,
+    transitionType: CatTransitionType,
+    duration: NSTimeInterval,
+    delegate: CatZoomTransitionCoordinatorDelegate) {
+      self.init()
+      self.targetView = view
+      self.transitionDuration = duration
+      self.transitionType = transitionType
+      self.delegate = delegate
+  }
+  
   
   public func transitionDuration(transitionContext: UIViewControllerContextTransitioning?) -> NSTimeInterval {
     return self.transitionDuration
@@ -27,60 +74,60 @@ public class CatZoomTransitionCoordinator: NSObject, UIViewControllerAnimatedTra
   
   public func animateTransition(transitionContext: UIViewControllerContextTransitioning) {
     
-    // anything commented out is related to this function, however not actually being used at this stage.
-    // keeping them in place in case i need to refer to old notes
     let containerView = transitionContext.containerView()!
-    //let originView: UIView = transitionContext.viewControllerForKey(UITransitionContextFromViewControllerKey)!.view
-    let destinationView = transitionContext.viewControllerForKey(UITransitionContextToViewControllerKey)!.view
-    //let destinaionViewController: UIViewController = transitionContext.viewControllerForKey(UITransitionContextToViewControllerKey)!
+    let fromViewController: UIViewController = transitionContext.viewControllerForKey(UITransitionContextFromViewControllerKey)!
+    let toViewController: UIViewController = transitionContext.viewControllerForKey(UITransitionContextToViewControllerKey)!
     
-    let boundsForImageFromOrigin: CGRect = (self.delegate?.boundsForViewToEnterTransition())! // this value is slightly inaccurate, dont know why
-    //let imageViewFromOrigin: UIImageView = (self.delegate?.captureSnapshotForImage())!
-    let viewFromOrigin: UIView = (self.delegate?.captureSnapShotForView!())!
-    
-    // here's the fucking annoying part. the UIImage has a size, however it's not the scaled size that is being displayed in the UIImageView.
-    // In order to get the accurate size of the image (and then be able to calculate its frame, and grow it appropriately), I'll need to calculate
-    // the size of the image based on the scaling type (AspectFit) and the size of the heigh of the imageView.
-    // see http://stackoverflow.com/questions/389342/how-to-get-the-size-of-a-scaled-uiimage-in-uiimageview
-    //let originImageSize: CGSize = (imageViewFromOrigin.image?.size)!
-    
-    //let fromViewSnapShot: UIView = imageViewFromOrigin.snapshotViewAfterScreenUpdates(false)
-    let fromViewSnapShot: UIView = viewFromOrigin.snapshotViewAfterScreenUpdates(false)
+    let fromView: UIView = transitionContext.viewControllerForKey(UITransitionContextFromViewControllerKey)!.view
+    let toView: UIView = transitionContext.viewControllerForKey(UITransitionContextToViewControllerKey)!.view
     
     let backgroundView: UIView = UIView(frame: containerView.bounds)
-    backgroundView.backgroundColor = UIColor.purpleColor()
-    backgroundView.alpha = 0.0
-    
+    backgroundView.backgroundColor = self.fadeColor
     containerView.addSubview(backgroundView)
-    backgroundView.addSubview(fromViewSnapShot)
     
-    fromViewSnapShot.frame = boundsForImageFromOrigin
-    let startingFrame: CGRect = boundsForImageFromOrigin
-    
-    // This is attempting to get the final frame location for the transitional view
-    // unfortunately, the frame sizes right now are a little off for the ending frame
-    // the start frame seems very accurate and should not be adapted
-    let endingFrame: CGRect = (self.delegate?.boundsForViewToOccupyAfterTransition())!
-    print("Ending Frame: \(endingFrame)")
-    
-    UIView.animateKeyframesWithDuration(self.transitionDuration, delay: 0.0, options:.CalculationModeLinear, animations: { () -> Void in
+    if let transitionDelegate: CatZoomTransitionCoordinatorDelegate = self.delegate {
+      let startFrame = transitionDelegate.coordinateZoomTransition(withCatZoomCoordinator: self,
+        forView: targetView!,
+        relativeToView: fromView,
+        fromViewController: fromViewController,
+        toViewController: toViewController)
       
-      UIView.addKeyframeWithRelativeStartTime(0.0, relativeDuration: 0.5, animations: { () -> Void in
-        fromViewSnapShot.frame = startingFrame // almost correct
-        backgroundView.alpha = 0.5
-      })
+      let endframe = transitionDelegate.coordinateZoomReverseTransition(withCatCoordinator: self,
+        forView: targetView!,
+        relativeToView: toView,
+        fromViewController: fromViewController,
+        toViewController: toViewController)
       
-      UIView.addKeyframeWithRelativeStartTime(0.5, relativeDuration: 0.5, animations: { () -> Void in
-        fromViewSnapShot.frame = endingFrame // very incorrect due to inaccurate image size
-        backgroundView.alpha = 1.0
-      })
-      
-      }) { finished -> Void in
-        backgroundView.addSubview(destinationView)
-        fromViewSnapShot.removeFromSuperview()
-        transitionContext.completeTransition(!transitionContext.transitionWasCancelled())
-        
     }
+    
+    if self.transitionType == .CatTransitionPresentating {
+      
+      
+//      UIView *fromControllerSnapshot = [fromControllerView snapshotViewAfterScreenUpdates:NO];
+//      
+//      // The fade view will sit between the "from" snapshot and the target snapshot.
+//      // This is what is used to create the fade effect.
+//      UIView *fadeView = [[UIView alloc] initWithFrame:containerView.bounds];
+//      fadeView.backgroundColor = _fadeColor;
+//      fadeView.alpha = 0.0;
+//      
+//      // The star of the show
+//      UIView *targetSnapshot = [_targetView snapshotViewAfterScreenUpdates:NO];
+//      targetSnapshot.frame = startFrame;
+//      
+    }
+    else if self.transitionType == .CatTransitionDismissing {
+      
+    }
+    else {
+      print("Unknown transition type")
+    }
+
+    
+//    // here's the fucking annoying part. the UIImage has a size, however it's not the scaled size that is being displayed in the UIImageView.
+//    // In order to get the accurate size of the image (and then be able to calculate its frame, and grow it appropriately), I'll need to calculate
+//    // the size of the image based on the scaling type (AspectFit) and the size of the heigh of the imageView.
+//    // see http://stackoverflow.com/questions/389342/how-to-get-the-size-of-a-scaled-uiimage-in-uiimageview
     
   }
   

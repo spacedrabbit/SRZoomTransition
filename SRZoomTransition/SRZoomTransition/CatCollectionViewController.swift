@@ -56,6 +56,7 @@ public class CatCollectionViewController: UIViewController, UICollectionViewData
   public static let CatCellIdentifier: String = "catCell"
   public var catArray: [Cat] = []
   private var numberOfImagesToFetch: Int = 20
+  private var selectedCell: UICollectionViewCell?
   
   // MARK: - Lifecycle
   public override func viewDidLoad() {
@@ -245,12 +246,14 @@ public class CatCollectionViewController: UIViewController, UICollectionViewData
   var transitioningViewRect: CGRect?
   var viewToSnapShot: UIView?
   public func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+    
     let formatString: String = "%.0f"
     if let catCollectionCell: UICollectionViewCell = collectionView.cellForItemAtIndexPath(indexPath) {
-      let cellX: String = String(format: formatString, catCollectionCell.frame.origin.x)
-      let cellY: String = String(format: formatString, catCollectionCell.frame.origin.y)
-      let cellWidth: String = String(format: formatString, catCollectionCell.frame.size.width)
-      let cellHeight: String = String(format: formatString, catCollectionCell.frame.size.height)
+      
+      let cellX = String(format: formatString, catCollectionCell.frame.origin.x),
+        cellY = String(format: formatString, catCollectionCell.frame.origin.y),
+        cellWidth = String(format: formatString, catCollectionCell.frame.size.width),
+        cellHeight = String(format: formatString, catCollectionCell.frame.size.height)
       
       let cellTranslatedInView: CGRect = catCollectionCell.convertRect(catCollectionCell.bounds, toView: self.view)
       
@@ -259,6 +262,10 @@ public class CatCollectionViewController: UIViewController, UICollectionViewData
       print("selectedCell in view's coordinate space: \(cellTranslatedInView)")
       transitioningViewRect = cellTranslatedInView
       viewToSnapShot = catCollectionCell.contentView
+    }
+    
+    if let catCollectionCell: UICollectionViewCell = collectionView.cellForItemAtIndexPath(indexPath) {
+      self.selectedCell = catCollectionCell
     }
     
     if let catToDisplay: Cat = self.catArray[indexPath.row] {
@@ -272,31 +279,82 @@ public class CatCollectionViewController: UIViewController, UICollectionViewData
     }
   }
   
-  public func boundsForViewToEnterTransition() -> CGRect {
-    if let viewRect: CGRect =  transitioningViewRect {
-      return viewRect
-    }
-    return CGRectZero
+  public func coordinateZoomTransition(withCatZoomCoordinator coordinator: CatZoomTransitionCoordinator,
+    forView view: UIView,
+    relativeToView relativeView: UIView,
+    fromViewController sourceVC: UIViewController,
+    toViewController destinationVC: UIViewController) -> CGRect {
+    
+      if sourceVC == self { // collection view is presenting
+        if let selectedCatCell: UICollectionViewCell = self.selectedCell {
+          return selectedCatCell.convertRect(selectedCatCell.bounds, toView: relativeView)
+        }
+      } else { // collection view is ending vc
+        if sourceVC is CatFullScreenView {
+          let sourceCatZoomView: CatFullScreenView = sourceVC as! CatFullScreenView
+          return sourceCatZoomView.imageView.convertRect(sourceCatZoomView.imageView.bounds, toView: relativeView)
+        }
+      }
+      
+      return CGRectZero
   }
   
-  public func boundsForViewToOccupyAfterTransition() -> CGRect {
-    if let viewRect: CGRect =  transitioningViewRect {
-      return viewRect
-    }
-    return CGRectZero
+  public func coordinateZoomReverseTransition(withCatCoordinator coordinator: CatZoomTransitionCoordinator,
+    forView view: UIView,
+    relativeToView relativeView: UIView,
+    fromViewController sourceVC: UIViewController,
+    toViewController destinationVC: UIViewController) -> CGRect {
+    
+      if sourceVC == self {
+        if destinationVC is CatFullScreenView {
+          let destinationCatVC: CatFullScreenView = destinationVC as! CatFullScreenView
+          return destinationCatVC.imageView.convertRect(destinationCatVC.imageView.bounds, toView: relativeView)
+        }
+      }
+      else if sourceVC is CatFullScreenView {
+        if let selectedCatCell: UICollectionViewCell = self.selectedCell {
+          return selectedCatCell.convertRect(selectedCatCell.bounds, toView: relativeView)
+        }
+      }
+
+      return CGRectZero
   }
   
-  public func captureSnapShotForView() -> UIView {
-    if let view: UIView = viewToSnapShot {
-      return view
-    }
-    return UIView()
-  }
-  
-  public func animationControllerForPresentedController(presented: UIViewController, presentingController presenting: UIViewController, sourceController source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-    let animationController: CatZoomTransitionCoordinator = CatZoomTransitionCoordinator()
-    animationController.delegate = self
-    return animationController
+//  public func boundsForViewToEnterTransition() -> CGRect {
+//    if let viewRect: CGRect =  transitioningViewRect {
+//      return viewRect
+//    }
+//    return CGRectZero
+//  }
+//  
+//  public func boundsForViewToOccupyAfterTransition() -> CGRect {
+//    if let viewRect: CGRect =  transitioningViewRect {
+//      return viewRect
+//    }
+//    return CGRectZero
+//  }
+//  
+//  public func captureSnapShotForView() -> UIView {
+//    if let view: UIView = viewToSnapShot {
+//      return view
+//    }
+//    return UIView()
+//  }
+//  
+  public func animationControllerForPresentedController(
+    presented: UIViewController,
+    presentingController presenting: UIViewController,
+    sourceController source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+      
+      var animationController: CatZoomTransitionCoordinator?
+      
+      if let selectedCatCell: UICollectionViewCell = self.selectedCell {
+        let transitionType: CatTransitionType = (presenting == self) ? .CatTransitionPresentating : .CatTransitionDismissing
+        animationController = CatZoomTransitionCoordinator(withTargetView: selectedCatCell, transitionType: transitionType, duration: 2.00, delegate: self)
+        animationController!.delegate = self
+      }
+      
+      return animationController
   }
   
   
