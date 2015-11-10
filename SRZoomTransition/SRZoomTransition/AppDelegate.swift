@@ -18,8 +18,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
     let collectionVC: CatCollectionViewController = CatCollectionViewController(WithPreloadedCatImages: 40)
-    let navigationVC: UINavigationController = UINavigationController(rootViewController: collectionVC)
-    self.window?.rootViewController = navigationVC
+    //let navigationVC: UINavigationController = UINavigationController(rootViewController: collectionVC)
+    self.window?.rootViewController = collectionVC
     self.window?.makeKeyAndVisible()
     
     return true

@@ -319,28 +319,7 @@ public class CatCollectionViewController: UIViewController, UICollectionViewData
 
       return CGRectZero
   }
-  
-//  public func boundsForViewToEnterTransition() -> CGRect {
-//    if let viewRect: CGRect =  transitioningViewRect {
-//      return viewRect
-//    }
-//    return CGRectZero
-//  }
-//  
-//  public func boundsForViewToOccupyAfterTransition() -> CGRect {
-//    if let viewRect: CGRect =  transitioningViewRect {
-//      return viewRect
-//    }
-//    return CGRectZero
-//  }
-//  
-//  public func captureSnapShotForView() -> UIView {
-//    if let view: UIView = viewToSnapShot {
-//      return view
-//    }
-//    return UIView()
-//  }
-//  
+
   public func animationControllerForPresentedController(
     presented: UIViewController,
     presentingController presenting: UIViewController,
@@ -349,7 +328,7 @@ public class CatCollectionViewController: UIViewController, UICollectionViewData
       var animationController: CatZoomTransitionCoordinator?
       
       if let selectedCatCell: UICollectionViewCell = self.selectedCell {
-        let transitionType: CatTransitionType = (presenting == self) ? .CatTransitionPresentating : .CatTransitionDismissing
+        let transitionType: CatTransitionType = (source == self) ? .CatTransitionPresentating : .CatTransitionDismissing
         animationController = CatZoomTransitionCoordinator(withTargetView: selectedCatCell, transitionType: transitionType, duration: 2.00, delegate: self)
         animationController!.delegate = self
       }

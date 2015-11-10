@@ -85,50 +85,83 @@ public class CatZoomTransitionCoordinator: NSObject, UIViewControllerAnimatedTra
     backgroundView.backgroundColor = self.fadeColor
     containerView.addSubview(backgroundView)
     
-    if let transitionDelegate: CatZoomTransitionCoordinatorDelegate = self.delegate {
-      let startFrame = transitionDelegate.coordinateZoomTransition(withCatZoomCoordinator: self,
+    var startFrame: CGRect = CGRectZero
+    var endframe: CGRect = CGRectZero
+    //if let transitionDelegate: CatZoomTransitionCoordinatorDelegate = self.delegate {
+      startFrame = self.delegate!.coordinateZoomTransition(withCatZoomCoordinator: self,
         forView: targetView!,
         relativeToView: fromView,
         fromViewController: fromViewController,
         toViewController: toViewController)
       
-      let endframe = transitionDelegate.coordinateZoomReverseTransition(withCatCoordinator: self,
+      endframe = self.delegate!.coordinateZoomReverseTransition(withCatCoordinator: self,
         forView: targetView!,
         relativeToView: toView,
         fromViewController: fromViewController,
         toViewController: toViewController)
       
-    }
+    //}
     
     if self.transitionType == .CatTransitionPresentating {
       
+      let fromControllerSnapshot: UIView = fromView.snapshotViewAfterScreenUpdates(false)
+      let fadeView: UIView = UIView(frame: containerView.bounds)
+      fadeView.backgroundColor = self.fadeColor
+      fadeView.alpha = 0.0
       
-//      UIView *fromControllerSnapshot = [fromControllerView snapshotViewAfterScreenUpdates:NO];
-//      
-//      // The fade view will sit between the "from" snapshot and the target snapshot.
-//      // This is what is used to create the fade effect.
-//      UIView *fadeView = [[UIView alloc] initWithFrame:containerView.bounds];
-//      fadeView.backgroundColor = _fadeColor;
-//      fadeView.alpha = 0.0;
-//      
-//      // The star of the show
-//      UIView *targetSnapshot = [_targetView snapshotViewAfterScreenUpdates:NO];
-//      targetSnapshot.frame = startFrame;
-//      
+      // The star of the show
+      let targetSnapShot: UIView = self.targetView!.snapshotViewAfterScreenUpdates(false)
+      targetSnapShot.frame = startFrame
+      
+      // Assemble the hierarchy in the container
+      containerView.addSubview(fromControllerSnapshot)
+      containerView.addSubview(fadeView)
+      containerView.addSubview(targetSnapShot)
+      
+      // Determine how much we need to scale
+      let scaleFactor: CGFloat = endframe.size.width / startFrame.size.width
+      
+      // Calculate the ending origin point for the "from" snapshot taking into account the scale transformation
+      let endPoint: CGPoint = CGPointMake((-startFrame.origin.x * scaleFactor) + endframe.origin.x, (-startFrame.origin.y * scaleFactor) + endframe.origin.y)
+      
+      
+      // Animate presentation
+      UIView.animateWithDuration(self.transitionDuration,
+        delay: 0.0,
+        options: UIViewAnimationOptions.CurveEaseInOut,
+        animations: { () -> Void in
+          // Transform and move the "from" snapshot
+          fromControllerSnapshot.transform = CGAffineTransformMakeScale(scaleFactor, scaleFactor)
+          fromControllerSnapshot.frame = CGRectMake(endPoint.x,
+            endPoint.y,
+            fromControllerSnapshot.frame.size.width,
+            fromControllerSnapshot.frame.size.height)
+          
+          // Fade
+          fadeView.alpha = 1.0
+          
+          // Move our target snapshot into position
+          targetSnapShot.frame = endframe
+        },
+        completion: { (finished: Bool) -> Void in
+          // Add "to" controller view
+          containerView.addSubview(toView)
+          
+          // Clean up animation views
+          backgroundView.removeFromSuperview()
+          fromControllerSnapshot.removeFromSuperview()
+          fadeView.removeFromSuperview()
+          targetSnapShot.removeFromSuperview()
+          
+          transitionContext.completeTransition(finished)
+      })
     }
     else if self.transitionType == .CatTransitionDismissing {
-      
+      print("the other type")
     }
     else {
       print("Unknown transition type")
     }
-
-    
-//    // here's the fucking annoying part. the UIImage has a size, however it's not the scaled size that is being displayed in the UIImageView.
-//    // In order to get the accurate size of the image (and then be able to calculate its frame, and grow it appropriately), I'll need to calculate
-//    // the size of the image based on the scaling type (AspectFit) and the size of the heigh of the imageView.
-//    // see http://stackoverflow.com/questions/389342/how-to-get-the-size-of-a-scaled-uiimage-in-uiimageview
-    
   }
   
   public func animationEnded(transitionCompleted: Bool) {
